@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 
-export default function AdminLoginPage() {
+function AdminLoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const from = searchParams.get('from') ?? '/admin';
@@ -80,5 +80,13 @@ export default function AdminLoginPage() {
         <Link href="/" className="hover:text-primary">Volver al sitio</Link>
       </p>
     </div>
+  );
+}
+
+export default function AdminLoginPage() {
+  return (
+    <Suspense fallback={<div className="mx-auto max-w-sm animate-pulse rounded-xl bg-slate-100 p-8" />}>
+      <AdminLoginForm />
+    </Suspense>
   );
 }
