@@ -16,7 +16,9 @@ export default async function AdminReservasPage({
   if (!user) redirect('/admin/login?from=/admin/reservas');
 
   const estado = searchParams.estado ?? '';
-  const q = (searchParams.q ?? '').trim();
+  const qRaw = (searchParams.q ?? '').trim().slice(0, 200);
+  // Escapar comodines de LIKE para búsqueda literal (\% y \_ en PostgreSQL)
+  const q = qRaw.replace(/\\/g, '\\\\').replace(/%/g, '\\%').replace(/_/g, '\\_');
 
   let query = supabase.from('reservas').select('*').order('entrada', { ascending: false });
   if (estado && ['confirmada', 'pendiente', 'cancelada', 'completada'].includes(estado)) {
@@ -39,7 +41,7 @@ export default async function AdminReservasPage({
       <ReservasToolbar
         reservas={reservas ?? []}
         estadoActual={estado}
-        qActual={q}
+        qActual={qRaw}
       />
       <AdminReservasList reservas={reservas ?? []} cancelarReserva={cancelarReserva} />
     </div>

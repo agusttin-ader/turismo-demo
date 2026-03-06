@@ -13,7 +13,7 @@ export default function HomePage() {
       {/* Hero con overlay y widget de búsqueda */}
       <section className="relative w-full min-h-[70vh] flex flex-col justify-end p-4 pb-10 sm:p-6 sm:pb-14 md:min-h-[80vh] md:justify-center md:items-center">
         <div className="absolute inset-0 z-0">
-          <UnsplashImage imageId="hero" fill showCredit creditPosition="overlay" className="h-full w-full" />
+          <UnsplashImage imageId="hero" fill showCredit creditPosition="overlay" className="h-full w-full" priority />
         </div>
         <div className="absolute inset-0 z-[1] bg-gradient-to-b from-slate-900/50 via-slate-900/60 to-slate-900/75" aria-hidden />
         <div className="relative z-10 w-full max-w-4xl mx-auto flex flex-col items-center">

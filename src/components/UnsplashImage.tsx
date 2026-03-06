@@ -18,6 +18,8 @@ interface UnsplashImageProps {
   creditPosition?: 'below' | 'overlay';
   /** Punto de anclaje de la imagen (ej. "center 30%" para mostrar más la parte superior). */
   objectPosition?: string;
+  /** Prioridad de carga (LCP): usar solo en hero / primera imagen visible. Evita lazy y preload. */
+  priority?: boolean;
 }
 
 const aspectRatioMap = {
@@ -62,6 +64,8 @@ function resolveImage(imageId: string): ResolvedImage | null {
   return null;
 }
 
+const QUALITY = 85;
+
 export function UnsplashImage({
   imageId,
   aspectRatio = '4/3',
@@ -70,6 +74,7 @@ export function UnsplashImage({
   showCredit = true,
   creditPosition = 'below',
   objectPosition,
+  priority = false,
 }: UnsplashImageProps) {
   const config = resolveImage(imageId);
 
@@ -114,6 +119,8 @@ export function UnsplashImage({
   const imageStyle = objectPosition ? { objectPosition } : undefined;
 
   if (fill) {
+    const sizesHero = '(max-width: 1920px) 100vw, 1920px';
+    const sizesCard = '(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 420px';
     return (
       <div className={`relative overflow-hidden ${className}`}>
         <Image
@@ -122,7 +129,9 @@ export function UnsplashImage({
           fill
           className="object-cover"
           style={imageStyle}
-          sizes="100vw"
+          sizes={priority ? sizesHero : sizesCard}
+          quality={QUALITY}
+          priority={priority}
         />
         {showCredit && (
           <div
@@ -148,7 +157,9 @@ export function UnsplashImage({
           fill
           className="object-cover"
           style={imageStyle}
-          sizes="(max-width: 768px) 100vw, 800px"
+          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 800px"
+          quality={QUALITY}
+          priority={priority}
         />
         {showCredit && creditPosition === 'overlay' && (
           <div

@@ -71,7 +71,8 @@ function AdminLoginForm() {
         <button
           type="submit"
           disabled={loading}
-          className="btn-primary w-full disabled:opacity-50"
+          aria-busy={loading}
+          className="btn-primary w-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-50"
         >
           {loading ? 'Entrando…' : 'Entrar'}
         </button>

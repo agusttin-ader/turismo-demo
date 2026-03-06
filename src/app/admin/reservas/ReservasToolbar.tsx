@@ -62,34 +62,51 @@ export function ReservasToolbar({
   }
 
   return (
-    <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
-        <select
-          value={estadoActual}
-          onChange={(e) => applyFilters(e.target.value, searchParams.get('q') ?? '')}
-          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-700 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary sm:w-auto sm:min-w-[10rem]"
-        >
-          <option value="">Todos los estados</option>
-          <option value="confirmada">Confirmadas</option>
-          <option value="pendiente">Pendientes</option>
-          <option value="cancelada">Canceladas</option>
-          <option value="completada">Completadas</option>
-        </select>
+    <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+        <div className="sm:min-w-[11rem]">
+          <label htmlFor="reservas-estado" className="sr-only">
+            Filtrar por estado
+          </label>
+          <select
+            id="reservas-estado"
+            value={estadoActual}
+            onChange={(e) => applyFilters(e.target.value, searchParams.get('q') ?? '')}
+            aria-label="Filtrar por estado de reserva"
+            className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-700 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary sm:w-auto sm:min-w-[11rem]"
+          >
+            <option value="">Todos los estados</option>
+            <option value="confirmada">Confirmadas</option>
+            <option value="pendiente">Pendientes</option>
+            <option value="cancelada">Canceladas</option>
+            <option value="completada">Completadas</option>
+          </select>
+        </div>
         <form
-          className="flex flex-col gap-2 sm:flex-row sm:flex-1 sm:max-w-sm"
+          role="search"
+          className="flex flex-col gap-2 sm:flex-row sm:flex-1 sm:max-w-xs"
           onSubmit={(e) => {
             e.preventDefault();
             applyFilters(estadoActual, q);
           }}
         >
+          <label htmlFor="reservas-search" className="sr-only">
+            Buscar por código, nombre o email
+          </label>
           <input
+            id="reservas-search"
             type="search"
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Código, nombre o email..."
+            placeholder="Código, nombre o email"
+            maxLength={200}
+            autoComplete="off"
             className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           />
-          <button type="submit" className="w-full rounded-lg bg-slate-800 px-3 py-2.5 text-sm font-medium text-white hover:bg-slate-700 sm:w-auto">
+          <button
+            type="submit"
+            className="w-full rounded-lg bg-slate-800 px-3 py-2.5 text-sm font-medium text-white hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-800 sm:w-auto"
+          >
             Buscar
           </button>
         </form>
@@ -98,7 +115,7 @@ export function ReservasToolbar({
         <button
           type="button"
           onClick={exportCsv}
-          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 sm:ml-auto sm:w-auto"
+          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500 sm:ml-auto sm:w-auto"
         >
           Exportar CSV
         </button>

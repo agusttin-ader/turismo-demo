@@ -30,8 +30,8 @@ export function AdminReservasList({ reservas, cancelarReserva }: { reservas: Res
   }
   if (reservas.length === 0) {
     return (
-      <div className="mt-6 rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-500">
-        Aún no hay reservas. Las que se confirmen desde el sitio aparecerán aquí.
+      <div className="mt-6 rounded-xl border border-slate-200 bg-white p-6 text-center text-slate-500 sm:p-8" role="status">
+        <p className="text-sm sm:text-base">Aún no hay reservas. Las que se confirmen desde el sitio aparecerán aquí.</p>
       </div>
     );
   }
@@ -80,7 +80,8 @@ export function AdminReservasList({ reservas, cancelarReserva }: { reservas: Res
                       type="button"
                       onClick={() => handleCancelar(r.id)}
                       disabled={cancelingId === r.id}
-                      className="text-xs font-medium text-red-600 hover:text-red-800 disabled:opacity-50"
+                      className="text-xs font-medium text-red-600 hover:text-red-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 disabled:opacity-50"
+                      aria-label={`Cancelar reserva ${r.codigo}`}
                     >
                       {cancelingId === r.id ? 'Cancelando…' : 'Cancelar'}
                     </button>
