@@ -51,7 +51,7 @@ export function ReservasToolbar({
       r.total_pesos,
       r.estado,
     ]);
-    const csv = [headers.join(','), ...rows.map((row) => row.map(escapeCsvCell).join(','))].join('\n');
+    const csv = [headers.join(','), ...rows.map((row) => row.map((cell) => escapeCsvCell(String(cell))).join(','))].join('\n');
     const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
