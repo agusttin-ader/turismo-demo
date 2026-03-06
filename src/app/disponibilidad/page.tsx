@@ -5,6 +5,7 @@ import { habitaciones } from '@/data/habitaciones';
 import { UnsplashImage } from '@/components/UnsplashImage';
 import { ImagePlaceholder } from '@/components/ImagePlaceholder';
 import { DisponibilidadStep1Form } from './DisponibilidadStep1Form';
+import { createServiceRoleClient } from '@/lib/supabase/server';
 
 const incluyePorSlug: Record<string, string[]> = {
   'dormitorio-compartido-6': ['Wi-Fi', 'Desayuno', 'Lockers', 'Luz y enchufe por cama'],
@@ -49,7 +50,7 @@ interface PageProps {
   searchParams: { entrada?: string; salida?: string; huespedes?: string };
 }
 
-export default function DisponibilidadPage({ searchParams }: PageProps) {
+export default async function DisponibilidadPage({ searchParams }: PageProps) {
   const entrada = searchParams.entrada ?? '';
   const salida = searchParams.salida ?? '';
   const huespedes = searchParams.huespedes ? Math.min(6, Math.max(1, parseInt(searchParams.huespedes, 10) || 1)) : 1;
@@ -62,6 +63,27 @@ export default function DisponibilidadPage({ searchParams }: PageProps) {
       : 0;
 
   const sinFechas = !entrada || !salida || noches <= 0;
+
+  // Habitaciones ya reservadas en este rango de fechas (solapamiento: reserva.entrada < salida AND reserva.salida > entrada)
+  let habitacionesOcupadasSlugs: string[] = [];
+  if (!sinFechas && entrada && salida) {
+    try {
+      const supabase = createServiceRoleClient();
+      const { data: reservasEnRango } = await supabase
+        .from('reservas')
+        .select('habitacion_slug')
+        .eq('estado', 'confirmada')
+        .lt('entrada', salida)
+        .gt('salida', entrada);
+      habitacionesOcupadasSlugs = [...new Set((reservasEnRango ?? []).map((r) => r.habitacion_slug))];
+    } catch {
+      // Si falla Supabase, mostramos todas (no bloquear la página)
+    }
+  }
+
+  const habitacionesDisponibles = sinFechas
+    ? habitaciones
+    : habitaciones.filter((h) => !habitacionesOcupadasSlugs.includes(h.slug));
 
   return (
     <div className="w-full">
@@ -98,10 +120,12 @@ export default function DisponibilidadPage({ searchParams }: PageProps) {
       {!sinFechas && (
         <section className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
           <p className="mb-6 text-slate-600">
-            Elegí una habitación para continuar al checkout. Mismo estilo que la página Habitaciones.
+            {habitacionesDisponibles.length === 0
+              ? 'No hay habitaciones disponibles para las fechas elegidas. Probá con otras fechas.'
+              : 'Elegí una habitación para continuar al checkout. Mismo estilo que la página Habitaciones.'}
           </p>
           <ul className="flex flex-col gap-8">
-            {habitaciones.map((hab) => {
+            {habitacionesDisponibles.map((hab) => {
               const totalPesos = hab.precioPorNoche * noches;
               const imageId = imageIdPorSlug[hab.slug];
               const reservarUrl = `/reservar?habitacion=${hab.slug}&entrada=${entrada}&salida=${salida}${huespedes > 1 ? `&huespedes=${huespedes}` : ''}`;

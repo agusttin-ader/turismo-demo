@@ -1,5 +1,7 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import type { ReservaRow } from '@/lib/supabase/types';
 
 function formatPesos(n: number) {
@@ -7,10 +9,25 @@ function formatPesos(n: number) {
 }
 
 function formatDate(s: string) {
-  return new Date(s).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' });
+  const d = new Date(s + 'T12:00:00');
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  return `${day}/${month}/${d.getFullYear()}`;
 }
 
-export function AdminReservasList({ reservas }: { reservas: ReservaRow[] }) {
+type CancelarReservaFn = (id: string) => Promise<{ ok: boolean; error?: string }>;
+
+export function AdminReservasList({ reservas, cancelarReserva }: { reservas: ReservaRow[]; cancelarReserva: CancelarReservaFn }) {
+  const router = useRouter();
+  const [cancelingId, setCancelingId] = useState<string | null>(null);
+
+  async function handleCancelar(id: string) {
+    if (cancelingId) return;
+    setCancelingId(id);
+    const result = await cancelarReserva(id);
+    setCancelingId(null);
+    if (result?.ok) router.refresh();
+  }
   if (reservas.length === 0) {
     return (
       <div className="mt-6 rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-500">
@@ -32,6 +49,7 @@ export function AdminReservasList({ reservas }: { reservas: ReservaRow[] }) {
               <th className="px-4 py-3 font-medium text-slate-700">Huésped</th>
               <th className="px-4 py-3 font-medium text-slate-700">Total</th>
               <th className="px-4 py-3 font-medium text-slate-700">Estado</th>
+              <th className="px-4 py-3 font-medium text-slate-700">Acciones</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-200 bg-white">
@@ -55,6 +73,18 @@ export function AdminReservasList({ reservas }: { reservas: ReservaRow[] }) {
                   >
                     {r.estado}
                   </span>
+                </td>
+                <td className="px-4 py-3">
+                  {(r.estado === 'confirmada' || r.estado === 'pendiente') && (
+                    <button
+                      type="button"
+                      onClick={() => handleCancelar(r.id)}
+                      disabled={cancelingId === r.id}
+                      className="text-xs font-medium text-red-600 hover:text-red-800 disabled:opacity-50"
+                    >
+                      {cancelingId === r.id ? 'Cancelando…' : 'Cancelar'}
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}

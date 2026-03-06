@@ -8,6 +8,12 @@ function formatPesos(n: number) {
   return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(n);
 }
 
+function formatDateDDMMYYYY(iso: string) {
+  if (!iso || iso.length < 10) return iso;
+  const [y, m, d] = iso.slice(0, 10).split('-');
+  return `${d}/${m}/${y}`;
+}
+
 export default function ConfirmacionPage() {
   const [data, setData] = useState<ReservaData | null>(null);
 
@@ -70,11 +76,11 @@ export default function ConfirmacionPage() {
             </div>
             <div className="flex justify-between">
               <dt className="text-slate-600">Entrada</dt>
-              <dd className="text-slate-900">{data.entrada}</dd>
+              <dd className="text-slate-900">{formatDateDDMMYYYY(data.entrada)}</dd>
             </div>
             <div className="flex justify-between">
               <dt className="text-slate-600">Salida</dt>
-              <dd className="text-slate-900">{data.salida}</dd>
+              <dd className="text-slate-900">{formatDateDDMMYYYY(data.salida)}</dd>
             </div>
             <div className="flex justify-between">
               <dt className="text-slate-600">Noches</dt>

@@ -60,15 +60,22 @@ alter table public.reservas enable row level security;
 alter table public.habitaciones enable row level security;
 alter table public.admins enable row level security;
 
--- Políticas para reservas: solo usuarios que estén en public.admins
+-- Función para ver si el usuario actual es admin (evita recursión en políticas)
+create or replace function public.is_admin()
+returns boolean
+language sql
+security definer
+set search_path = public
+stable
+as $$
+  select exists (select 1 from public.admins a where a.user_id = auth.uid());
+$$;
+
+-- Políticas para reservas
 create policy "Admins pueden hacer todo en reservas"
   on public.reservas for all
-  using (
-    exists (select 1 from public.admins a where a.user_id = auth.uid())
-  )
-  with check (
-    exists (select 1 from public.admins a where a.user_id = auth.uid())
-  );
+  using (public.is_admin())
+  with check (public.is_admin());
 
 -- Lectura pública de habitaciones (para el sitio); escritura solo admins
 create policy "Todos pueden leer habitaciones"
@@ -77,13 +84,13 @@ create policy "Todos pueden leer habitaciones"
 
 create policy "Admins pueden gestionar habitaciones"
   on public.habitaciones for all
-  using (exists (select 1 from public.admins a where a.user_id = auth.uid()))
-  with check (exists (select 1 from public.admins a where a.user_id = auth.uid()));
+  using (public.is_admin())
+  with check (public.is_admin());
 
--- Admins: solo el propio admin puede verse (o un superadmin; simplificamos)
+-- Admins: solo admins pueden leer la tabla admins
 create policy "Admins pueden leer admins"
   on public.admins for select
-  using (exists (select 1 from public.admins a where a.user_id = auth.uid()));
+  using (public.is_admin());
 
 -- Inserción de reservas desde el sitio público (sin auth): usamos service role desde Next.js
 -- o una policy que permita INSERT sin ser admin (solo INSERT). Mejor: el sitio llama a una
