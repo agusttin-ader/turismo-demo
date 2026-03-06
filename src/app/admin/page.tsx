@@ -83,7 +83,7 @@ export default async function AdminDashboardPage() {
 
       {proximasLlegadas && proximasLlegadas.length > 0 && (
         <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
-          <div className="border-b border-slate-200 px-5 py-4">
+          <div className="border-b border-slate-200 px-4 py-4 sm:px-5">
             <h2 className="font-semibold text-slate-900">Próximas llegadas</h2>
             <p className="text-sm text-slate-500">Reservas confirmadas con entrada en los próximos 7 días.</p>
           </div>
@@ -92,9 +92,9 @@ export default async function AdminDashboardPage() {
               <li key={r.id}>
                 <Link
                   href="/admin/reservas"
-                  className="flex items-center justify-between px-5 py-3 transition hover:bg-slate-50"
+                  className="flex flex-col gap-1 px-4 py-3 transition hover:bg-slate-50 sm:flex-row sm:items-center sm:justify-between sm:px-5 sm:gap-4"
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                     <span className="font-mono text-sm font-medium text-slate-900">{r.codigo}</span>
                     <span className="text-sm text-slate-600">{r.nombre_guest}</span>
                     <span className="text-sm text-slate-500">{r.habitacion_slug}</span>

@@ -51,7 +51,20 @@ function LogoutIcon({ className }: { className?: string }) {
   );
 }
 
-export function AdminSidebar() {
+function CloseIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  );
+}
+
+interface AdminSidebarProps {
+  open?: boolean;
+  onClose?: () => void;
+}
+
+export function AdminSidebar({ open = true, onClose }: AdminSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [user, setUser] = useState<{ email?: string } | null>(null);
@@ -72,12 +85,29 @@ export function AdminSidebar() {
   if (isLoginPage) return null;
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-slate-800 bg-slate-900">
-      <div className="flex h-14 shrink-0 items-center gap-2 border-b border-slate-800 px-5">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-          <span className="text-sm font-bold text-white">R</span>
+    <aside
+      className={`fixed inset-y-0 left-0 z-40 flex w-72 max-w-[85vw] flex-col border-r border-slate-800 bg-slate-900 transition-transform duration-200 ease-out lg:w-64 lg:max-w-none lg:translate-x-0 ${
+        open ? 'translate-x-0' : '-translate-x-full'
+      }`}
+      aria-hidden={!open}
+    >
+      <div className="flex h-14 shrink-0 items-center justify-between gap-2 border-b border-slate-800 px-4 lg:px-5">
+        <div className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
+            <span className="text-sm font-bold text-white">R</span>
+          </div>
+          <span className="text-sm font-semibold tracking-tight text-white">Refugio Nahuel</span>
         </div>
-        <span className="text-sm font-semibold tracking-tight text-white">Refugio Nahuel</span>
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white lg:hidden"
+            aria-label="Cerrar menú"
+          >
+            <CloseIcon className="h-5 w-5" />
+          </button>
+        )}
       </div>
       <nav className="flex-1 space-y-0.5 overflow-y-auto px-3 py-4" aria-label="Admin">
         {navItems.map(({ href, label, icon: Icon }) => {
@@ -86,6 +116,7 @@ export function AdminSidebar() {
             <Link
               key={href}
               href={href}
+              onClick={onClose}
               className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
                 isActive
                   ? 'bg-primary/20 text-primary'
@@ -103,6 +134,7 @@ export function AdminSidebar() {
           href="/"
           target="_blank"
           rel="noopener noreferrer"
+          onClick={onClose}
           className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-400 transition hover:bg-slate-800 hover:text-white"
         >
           <ExternalIcon className="h-5 w-5 shrink-0" />

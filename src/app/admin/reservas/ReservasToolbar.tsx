@@ -62,41 +62,43 @@ export function ReservasToolbar({
   }
 
   return (
-    <div className="mb-4 flex flex-wrap items-center gap-3">
-      <select
-        value={estadoActual}
-        onChange={(e) => applyFilters(e.target.value, searchParams.get('q') ?? '')}
-        className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-      >
-        <option value="">Todos los estados</option>
-        <option value="confirmada">Confirmadas</option>
-        <option value="pendiente">Pendientes</option>
-        <option value="cancelada">Canceladas</option>
-        <option value="completada">Completadas</option>
-      </select>
-      <form
-        className="flex gap-2"
-        onSubmit={(e) => {
-          e.preventDefault();
-          applyFilters(estadoActual, q);
-        }}
-      >
-        <input
-          type="search"
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="Código, nombre o email..."
-          className="w-48 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 placeholder-slate-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary sm:w-56"
-        />
-        <button type="submit" className="rounded-lg bg-slate-800 px-3 py-2 text-sm font-medium text-white hover:bg-slate-700">
-          Buscar
-        </button>
-      </form>
+    <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
+        <select
+          value={estadoActual}
+          onChange={(e) => applyFilters(e.target.value, searchParams.get('q') ?? '')}
+          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-700 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary sm:w-auto sm:min-w-[10rem]"
+        >
+          <option value="">Todos los estados</option>
+          <option value="confirmada">Confirmadas</option>
+          <option value="pendiente">Pendientes</option>
+          <option value="cancelada">Canceladas</option>
+          <option value="completada">Completadas</option>
+        </select>
+        <form
+          className="flex flex-col gap-2 sm:flex-row sm:flex-1 sm:max-w-sm"
+          onSubmit={(e) => {
+            e.preventDefault();
+            applyFilters(estadoActual, q);
+          }}
+        >
+          <input
+            type="search"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Código, nombre o email..."
+            className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+          />
+          <button type="submit" className="w-full rounded-lg bg-slate-800 px-3 py-2.5 text-sm font-medium text-white hover:bg-slate-700 sm:w-auto">
+            Buscar
+          </button>
+        </form>
+      </div>
       {reservas.length > 0 && (
         <button
           type="button"
           onClick={exportCsv}
-          className="ml-auto rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 sm:ml-auto sm:w-auto"
         >
           Exportar CSV
         </button>

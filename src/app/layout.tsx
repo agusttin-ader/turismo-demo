@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import 'react-day-picker/style.css';
@@ -13,6 +13,12 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: 'Refugio Nahuel | Hostel en Bariloche, Río Negro',
   description: 'Hostel de montaña en Bariloche. Alojamiento económico, habitaciones compartidas y privadas. Experiencia patagónica.',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
