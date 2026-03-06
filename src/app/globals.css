@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Etapa 3: paleta refinada — Bariloche / Patagonia */
+:root {
+  --color-primary: 13 92 82;        /* primary */
+  --color-primary-light: 15 118 110;
+  --color-primary-dark: 19 78 72;
+  --color-accent: 217 119 6;        /* accent / amber-600 */
+  --color-accent-light: 245 158 11;
+  --color-accent-dark: 180 83 9;
+  --color-surface: 248 250 252;
+  --color-surface-dark: 15 23 42;
+  --color-text: 15 23 42;
+  --color-text-muted: 71 85 105;
+  /* Fondo de página: suave y amable (tono cálido muy claro) */
+  --color-page-bg: 250 249 247;
+  --hero-overlay: linear-gradient(to bottom, rgba(15, 23, 42, 0.5) 0%, rgba(15, 23, 42, 0.7) 100%);
+}
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  body {
+    @apply antialiased text-slate-900;
+    background-color: rgb(var(--color-page-bg));
+  }
+  /* Jerarquía tipográfica */
+  h1, h2, h3 {
+    @apply tracking-tight;
+  }
+}
+
+@layer components {
+  /* Botón primario (teal) */
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+  }
+  /* Botón acento (amber) para CTAs destacados */
+  .btn-accent {
+    @apply inline-flex items-center justify-center rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-accent-dark focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2;
+  }
+  /* Botón secundario (outline) */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-xl border-2 border-white px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent;
+  }
+  /* Título de sección */
+  .section-title {
+    @apply text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl;
+  }
+  .section-subtitle {
+    @apply text-lg font-medium text-slate-600 sm:text-xl;
+  }
+  /* Card estándar */
+  .card {
+    @apply rounded-2xl border border-slate-200/80 bg-white shadow-card;
+  }
+}
+
+/* Calendario de rango (react-day-picker) — colores y estilo del sitio */
+.rdp-wrapper .rdp-root {
+  --rdp-accent-color: #0d5c52;
+  --rdp-accent-background-color: #ecfdf5;
+  --rdp-day-height: 40px;
+  --rdp-day-width: 40px;
+  --rdp-day_button-height: 38px;
+  --rdp-day_button-width: 38px;
+  --rdp-day_button-border-radius: 0.75rem;
+  --rdp-range_middle-background-color: #ecfdf5;
+  --rdp-range_start-date-background-color: #0d5c52;
+  --rdp-range_end-date-background-color: #0d5c52;
+  --rdp-today-color: #0d5c52;
+  --rdp-nav_height: 2.5rem;
+}
+.rdp-wrapper .rdp-root .rdp-caption_label,
+.rdp-wrapper .rdp-root .rdp-month_caption {
+  font-weight: 600;
+  color: #0f172a;
+  font-size: 0.9375rem;
+}
+.rdp-wrapper .rdp-root .rdp-nav button {
+  border-radius: 0.5rem;
+  color: #475569;
+}
+.rdp-wrapper .rdp-root .rdp-nav button:hover {
+  background-color: #f1f5f9;
+  color: #0d5c52;
+}
+.rdp-wrapper .rdp-root .rdp-weekday {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+/* Calendario compacto (formulario de reserva) */
+.rdp-wrapper.rdp-compact .rdp-root {
+  --rdp-day-height: 32px;
+  --rdp-day-width: 32px;
+  --rdp-day_button-height: 30px;
+  --rdp-day_button-width: 30px;
+  --rdp-day_button-border-radius: 0.5rem;
+  --rdp-nav_height: 2rem;
+}
+.rdp-wrapper.rdp-compact .rdp-root .rdp-caption_label,
+.rdp-wrapper.rdp-compact .rdp-root .rdp-month_caption {
+  font-size: 0.875rem;
+}
+.rdp-wrapper.rdp-compact .rdp-root .rdp-weekday {
+  font-size: 0.65rem;
+}
+.rdp-wrapper.rdp-compact {
+  padding: 0.75rem;
+}
+
+/* Etapa 4: animaciones al scroll */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+.animate-on-scroll.animate-on-scroll-in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Delays para animación de entrada del hero */
+.anim-delay-0 { animation-delay: 0ms; }
+.anim-delay-150 { animation-delay: 150ms; }
+.anim-delay-300 { animation-delay: 300ms; }
+.anim-delay-500 { animation-delay: 500ms; }
