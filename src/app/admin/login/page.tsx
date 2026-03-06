@@ -85,8 +85,10 @@ function AdminLoginForm() {
 
 export default function AdminLoginPage() {
   return (
-    <Suspense fallback={<div className="mx-auto max-w-sm animate-pulse rounded-xl bg-slate-100 p-8" />}>
-      <AdminLoginForm />
-    </Suspense>
+    <div className="flex min-h-screen items-center justify-center px-4 py-12">
+      <Suspense fallback={<div className="w-full max-w-sm animate-pulse rounded-xl bg-slate-100 p-8" />}>
+        <AdminLoginForm />
+      </Suspense>
+    </div>
   );
 }

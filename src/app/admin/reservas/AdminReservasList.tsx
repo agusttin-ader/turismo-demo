@@ -37,10 +37,10 @@ export function AdminReservasList({ reservas, cancelarReserva }: { reservas: Res
   }
 
   return (
-    <div className="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
-          <thead className="bg-slate-50">
+          <thead className="bg-slate-50/80">
             <tr>
               <th className="px-4 py-3 font-medium text-slate-700">Código</th>
               <th className="px-4 py-3 font-medium text-slate-700">Habitación</th>

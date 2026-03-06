@@ -75,7 +75,7 @@ export default async function DisponibilidadPage({ searchParams }: PageProps) {
         .eq('estado', 'confirmada')
         .lt('entrada', salida)
         .gt('salida', entrada);
-      habitacionesOcupadasSlugs = [...new Set((reservasEnRango ?? []).map((r) => r.habitacion_slug))];
+      habitacionesOcupadasSlugs = Array.from(new Set((reservasEnRango ?? []).map((r) => r.habitacion_slug)));
     } catch {
       // Si falla Supabase, mostramos todas (no bloquear la página)
     }
