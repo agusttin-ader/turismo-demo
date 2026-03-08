@@ -42,6 +42,7 @@ export default function GaleriaPage() {
                     showCredit
                     creditPosition="below"
                     objectPosition={item.objectPosition}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"
                   />
                 ) : (
                   <ImagePlaceholder

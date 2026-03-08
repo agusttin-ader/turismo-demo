@@ -46,6 +46,9 @@ export const metadata = {
   description: 'Elegí tu habitación según fechas y huéspedes. Refugio Nahuel, Bariloche.',
 };
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface PageProps {
   searchParams: { entrada?: string; salida?: string; huespedes?: string };
 }
@@ -64,18 +67,20 @@ export default async function DisponibilidadPage({ searchParams }: PageProps) {
 
   const sinFechas = !entrada || !salida || noches <= 0;
 
-  // Habitaciones ya reservadas en este rango de fechas (solapamiento: reserva.entrada < salida AND reserva.salida > entrada)
+  // Habitaciones ya reservadas en este rango (confirmada o pendiente). Solapamiento: reserva.entrada < salida AND reserva.salida > entrada
   let habitacionesOcupadasSlugs: string[] = [];
   if (!sinFechas && entrada && salida) {
     try {
       const supabase = createServiceRoleClient();
-      const { data: reservasEnRango } = await supabase
+      const { data: reservasEnRango, error } = await supabase
         .from('reservas')
         .select('habitacion_slug')
-        .eq('estado', 'confirmada')
+        .in('estado', ['confirmada', 'pendiente'])
         .lt('entrada', salida)
         .gt('salida', entrada);
-      habitacionesOcupadasSlugs = Array.from(new Set((reservasEnRango ?? []).map((r) => r.habitacion_slug)));
+      if (!error && reservasEnRango) {
+        habitacionesOcupadasSlugs = Array.from(new Set(reservasEnRango.map((r) => r.habitacion_slug)));
+      }
     } catch {
       // Si falla Supabase, mostramos todas (no bloquear la página)
     }

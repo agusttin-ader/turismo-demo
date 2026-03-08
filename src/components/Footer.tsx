@@ -25,7 +25,7 @@ export function Footer() {
             <ul className="flex flex-wrap gap-x-6 gap-y-1">
               {links.map(({ href, label }) => (
                 <li key={href}>
-                  <Link href={href} className="text-sm font-medium text-slate-400 hover:text-white transition-colors">
+                  <Link href={href} className="text-sm font-medium text-slate-400 hover:text-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white rounded">
                     {label}
                   </Link>
                 </li>

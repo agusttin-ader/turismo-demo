@@ -20,6 +20,8 @@ interface UnsplashImageProps {
   objectPosition?: string;
   /** Prioridad de carga (LCP): usar solo en hero / primera imagen visible. Evita lazy y preload. */
   priority?: boolean;
+  /** Override de sizes para contextos específicos (ej. grid 3 columnas: "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"). */
+  sizes?: string;
 }
 
 const aspectRatioMap = {
@@ -75,6 +77,7 @@ export function UnsplashImage({
   creditPosition = 'below',
   objectPosition,
   priority = false,
+  sizes: sizesOverride,
 }: UnsplashImageProps) {
   const config = resolveImage(imageId);
 
@@ -121,6 +124,7 @@ export function UnsplashImage({
   if (fill) {
     const sizesHero = '(max-width: 1920px) 100vw, 1920px';
     const sizesCard = '(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 420px';
+    const sizes = sizesOverride ?? (priority ? sizesHero : sizesCard);
     return (
       <div className={`relative overflow-hidden ${className}`}>
         <Image
@@ -129,7 +133,7 @@ export function UnsplashImage({
           fill
           className="object-cover"
           style={imageStyle}
-          sizes={priority ? sizesHero : sizesCard}
+          sizes={sizes}
           quality={QUALITY}
           priority={priority}
         />
@@ -157,7 +161,7 @@ export function UnsplashImage({
           fill
           className="object-cover"
           style={imageStyle}
-          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 800px"
+          sizes={sizesOverride ?? '(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 800px'}
           quality={QUALITY}
           priority={priority}
         />

@@ -19,7 +19,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-200/80 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/90">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:h-16 sm:px-6">
-        <Link href="/" className="text-lg font-bold tracking-tight text-primary sm:text-xl">
+        <Link href="/" className="text-lg font-bold tracking-tight text-primary sm:text-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded">
           Refugio Nahuel
         </Link>
 
@@ -29,7 +29,7 @@ export function Header() {
             <Link
               key={href}
               href={href}
-              className="text-sm font-medium text-slate-600 hover:text-primary transition-colors"
+              className="text-sm font-medium text-slate-600 hover:text-primary transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded"
             >
               {label}
             </Link>
@@ -66,7 +66,7 @@ export function Header() {
               <li key={href}>
                 <Link
                   href={href}
-                  className="block py-2 font-medium text-slate-700 hover:text-primary"
+                  className="block py-2 font-medium text-slate-700 hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded"
                   onClick={() => setMenuOpen(false)}
                 >
                   {label}
